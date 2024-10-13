@@ -30,9 +30,9 @@ export const DayHeader = styled.h2`
 `;
 
 export const TaskItem = styled.div`
-  width: 100%;
+    width: 23vh;
   position: relative;  // Permite o uso de position: absolute nos filhos
-  margin: 10px 0;
+  margin: 5px 0;
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 4px;
@@ -47,6 +47,19 @@ export const TaskItem = styled.div`
   }
 `;
 
+export const DisabledTaskItem = styled.div`
+  width: 100%;
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #e0e0e0;  // Cor de fundo para o item desabilitado
+  height: 50px;  // Tamanho fixo
+  display: flex;
+  flex-direction: column;  // Permite empilhar o título e a descrição
+  justify-content: center;  // Centraliza o conteúdo verticalmente
+`;
+
 export const TaskTitle = styled.h3`
   margin: 0;
   font-size: 1.2rem;
@@ -54,16 +67,8 @@ export const TaskTitle = styled.h3`
 `;
 
 export const TaskDescription = styled.p`
-  position: absolute;  // Mantém a descrição sobreposta sem alterar layout
-  bottom: 10px;
-  left: 10px;
-  right: 10px;
+  margin: 5px 0 0;  // Margem acima do texto para separação
   font-size: 1rem;
   color: #666;
-  opacity: 0;
-  transition: opacity 0.3s ease-in-out;
-
-  ${TaskItem}:hover & {
-    opacity: 1;  // Exibe a descrição suavemente ao passar o mouse
-  }
+  opacity: 0.7;  // Opacidade para diferenciar texto desabilitado
 `;

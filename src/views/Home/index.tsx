@@ -1,4 +1,4 @@
-// components/Home.tsx
+// index.tsx
 import React from 'react';
 import {
     HomeContainer,
@@ -7,7 +7,8 @@ import {
     DayHeader,
     TaskItem,
     TaskTitle,
-    TaskDescription
+    TaskDescription,
+    DisabledTaskItem // Mantenha o estilo para itens desabilitados
 } from './style';
 
 export const data = [
@@ -25,30 +26,44 @@ const daysOfWeek = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado',
 
 export default function Home() {
     const dailyTasks = data.filter((task) => task.tipo === 'diario');
-    const weeklyTasks = data.filter((task) => task.tipo === 'semanal');
-    const monthlyTasks = data.filter((task) => task.tipo === 'mensal');
+
+    // Obter a data atual
+    const today = new Date();
+    const currentDay = today.getDay() === 0 ? 6 : today.getDay() - 1; // Ajuste para o índice do dia (0 é domingo)
 
     return (
         <HomeContainer>
             <h1>Tier List Semanal de Tarefas</h1>
 
             <WeekGrid>
-                {daysOfWeek.map((day) => (
+                {daysOfWeek.map((day, index) => (
                     <DayColumn key={day}>
                         <DayHeader>{day}</DayHeader>
-                        {dailyTasks.map((task) => (
-                            <TaskItem key={task.id}>
-                                <TaskTitle>{task.dsc_titulo}</TaskTitle>
-                                <TaskDescription>{task.dsc_descricao}</TaskDescription>
-                            </TaskItem>
-                        ))}
+                        {dailyTasks.map((task) => {
+                            const isDisabled = index !== currentDay; // Bloqueia dias que não são o dia atual
+                            return (
+                                <TaskItem key={task.id}>
+                                    {isDisabled ? (
+                                        <DisabledTaskItem>
+                                            <TaskTitle>{task.dsc_titulo}</TaskTitle>
+                                            <TaskDescription>{task.dsc_descricao}</TaskDescription>
+                                        </DisabledTaskItem>
+                                    ) : (
+                                        <TaskItem>
+                                            <TaskTitle>{task.dsc_titulo}</TaskTitle>
+                                            <TaskDescription>{task.dsc_descricao}</TaskDescription>
+                                        </TaskItem>
+                                    )}
+                                </TaskItem>
+                            );
+                        })}
                     </DayColumn>
                 ))}
             </WeekGrid>
 
             <h2>Tarefas Semanais</h2>
             <WeekGrid>
-                {weeklyTasks.map((task) => (
+                {data.filter((task) => task.tipo === 'semanal').map((task) => (
                     <TaskItem key={task.id}>
                         <TaskTitle>{task.dsc_titulo}</TaskTitle>
                         <TaskDescription>{task.dsc_descricao}</TaskDescription>
@@ -58,7 +73,7 @@ export default function Home() {
 
             <h2>Tarefas Mensais</h2>
             <WeekGrid>
-                {monthlyTasks.map((task) => (
+                {data.filter((task) => task.tipo === 'mensal').map((task) => (
                     <TaskItem key={task.id}>
                         <TaskTitle>{task.dsc_titulo}</TaskTitle>
                         <TaskDescription>{task.dsc_descricao}</TaskDescription>
